@@ -2,7 +2,7 @@ pipeline {
      agent { label 'slave1' }
 
 	environment {	
-		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+		DOCKERHUB_CREDENTIALS=credentials('dockerhubpwd')
 	}
 		
     stages {
@@ -21,8 +21,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Perform Docker Build'
-				sh "docker build -t loksaieta/bankapp-eta-app:${BUILD_NUMBER} ."
-				sh "docker tag loksaieta/bankapp-eta-app:${BUILD_NUMBER} loksaieta/bankapp-eta-app:latest"
+				sh "docker build -t rajeshyadavhub/bankapp-eta-app:${BUILD_NUMBER} ."
+				sh "docker tag rajeshyadavhub/bankapp-eta-app:${BUILD_NUMBER} rajeshyadavhub/bankapp-eta-app:latest"
 				sh 'docker image list'
             }
         }
@@ -36,13 +36,13 @@ pipeline {
         stage('Publish the Image to Dockerhub') {
             steps {
                 echo 'Publish to DockerHub'
-				sh "docker push loksaieta/bankapp-eta-app:latest"                
+				sh "docker push rajeshyadavhub/bankapp-eta-app:latest"                
             }
         }
         stage('Deploy to Kubernetes Cluster') {
             steps {
 				script {
-				sshPublisher(publishers: [sshPublisherDesc(configName: 'SA_WD_Kubernetes_Master', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f kubernetesdeploy.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+				sshPublisher(publishers: [sshPublisherDesc(configName: 'raj-admin', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f kubernetesdeploy.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
 			}				          
             }
         }
