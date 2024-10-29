@@ -9,7 +9,7 @@ pipeline {
         stage('SCM_Checkout') {
             steps {
                 echo 'Perform SCM Checkout'
-                git 'https://github.com/SA-AWS-DevOps-July24/BankingApp.git'
+                git 'https://github.com/rajeshsonu2025/banking.git'
             }
         }
         stage('Application Build') {
