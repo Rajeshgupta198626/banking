@@ -1,5 +1,5 @@
 pipeline {
-     agent { label 'slave1' }
+     agent any
 
 	environment {	
 		DOCKERHUB_CREDENTIALS=credentials('dockerhubpwd')
@@ -39,10 +39,10 @@ pipeline {
 				sh "docker push rajeshyadavhub/bankapp-eta-app:latest"                
             }
         }
-        stage('Deploy to Kubernetes Cluster') {
+        stage('Deploy to test server') {
             steps {
 				script {
-				sshPublisher(publishers: [sshPublisherDesc(configName: 'kubernetes-admin', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f kubernetesdeploy.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		        ansiblePlaybook become: true, credentialsId: 'ansible2', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts/', playbook: 'ansible-playbook.yml', vaultTmpPath: ''
 			}				          
             }
         }
