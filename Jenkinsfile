@@ -9,7 +9,7 @@ pipeline {
         stage('SCM_Checkout') {
             steps {
                 echo 'Perform SCM Checkout'
-                git 'https://github.com/rajeshsonu2025/banking.git'
+                git 'https://github.com/Rajeshgupta198626/banking.git'
             }
         }
         stage('Application Build') {
@@ -21,8 +21,8 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Perform Docker Build'
-				sh "docker build -t rajeshyadavhub/bankapp-eta-app:${BUILD_NUMBER} ."
-				sh "docker tag rajeshyadavhub/bankapp-eta-app:${BUILD_NUMBER} rajeshyadavhub/bankapp-eta-app:latest"
+				sh "docker build -t rajeshguptahub/bankapp-eta-app:${BUILD_NUMBER} ."
+				sh "docker tag rajeshguptahub/bankapp-eta-app:${BUILD_NUMBER} rajeshguptahub/bankapp-eta-app:latest"
 				sh 'docker image list'
             }
         }
@@ -36,13 +36,13 @@ pipeline {
         stage('Publish the Image to Dockerhub') {
             steps {
                 echo 'Publish to DockerHub'
-				sh "docker push rajeshyadavhub/bankapp-eta-app:latest"                
+				sh "docker push rajeshguptahub/bankapp-eta-app:latest"                
             }
         }
         stage('Deploy to test server') {
             steps {
 				script {
-		        ansiblePlaybook become: true, credentialsId: 'ansible2', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts/', playbook: 'ansible-playbook.yml', vaultTmpPath: ''
+		        ansiblePlaybookansiblePlaybook become: true, credentialsId: 'Ansible', disableHostKeyChecking: true, installation: 'Ansible', inventory: '/etc/ansible/hosts', playbook: 'ansible-playbook.yml', vaultTmpPath: ''
 			}				          
             }
         }
